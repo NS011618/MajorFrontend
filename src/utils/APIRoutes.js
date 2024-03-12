@@ -1,4 +1,4 @@
-const host = "https://majorbackend-tedz.onrender.com";
+const host = "http://127.0.0.1:5000";
 export const registerRoute = `${host}/signup`;
 export const loginRoute = `${host}/login`;
 export const logoutRoute = `${host}/logout`;

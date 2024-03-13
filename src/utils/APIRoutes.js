@@ -1,4 +1,4 @@
-const host = "http://0.0.0.0:10000 ";
+const host = "https://majorbackend-p7u6.onrender.com";
 export const registerRoute = `${host}/signup`;
 export const loginRoute = `${host}/login`;
 export const logoutRoute = `${host}/logout`;

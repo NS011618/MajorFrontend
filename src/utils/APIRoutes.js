@@ -1,4 +1,4 @@
-const host = "http://127.0.0.1:8000";
+const host = "https://major-backend-indol.vercel.app/";
 export const registerRoute = `${host}/signup`;
 export const loginRoute = `${host}/login`;
 export const logoutRoute = `${host}/logout`;

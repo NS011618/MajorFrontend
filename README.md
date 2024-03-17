@@ -7,12 +7,37 @@
 - Logout 
 - Handling input files and redirecting to (admin dashboard or patient dashboard) based on roles
 - Storing patient,admin credentials and csv data in mongodb database
-- Implementing contact functionality (using mailhog to communicate)
+- Implemented Patient Profile
+- Implemented contact functionality (using mailhog to communicate)
 - Added sypmtoms data set and also disease dataset in mongodb 
 - Adding Machine learning model(decision tree model) and predicting the disease
-- Suggesting Medcines and Nutrient Diet (May have some improvements)
-- Updating Admin Dashboard (still in progress)
+- Suggesting Medcines and Nutrient Diet 
+- Using PowerBI in Admin Dashboard
+
+## Technologies Used: 
+```bash
+ReactJs, Flask, MongoDb, npm, Scikit-learn, TailwindCSS
+```
+
+### How to run the project
+Install dependencies
+
+```bash
+  npm install
+```
+or
+```bash
+  npm i
+```
+To run front end
+To 
+```bash
+  npm start
+```
+To run Backend goto server 
+```bash
+  pip install -r requirements.txt then run python app.py file
+```
 ## Team members:
 - Sathvik Bandru
 - Ashish Golla
-

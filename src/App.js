@@ -2,15 +2,7 @@
 /* eslint-disable no-unused-vars */
 import './App.css'
 import React, { useEffect, useState } from 'react'
-import {
-   BrowserRouter,
-   Link,
-   Route,
-   Routes,
-   Outlet,
-   Navigate,
-   useNavigate,
-} from 'react-router-dom'
+import { BrowserRouter, Link, Route, Routes, Outlet, Navigate } from 'react-router-dom'
 import {
    About,
    Contact,
@@ -23,6 +15,8 @@ import {
 } from './pages'
 import useLocalStorageState from 'use-local-storage-state'
 import { IoPersonCircleSharp } from 'react-icons/io5'
+import { logoutRoute } from './utils/APIRoutes'
+import axios from 'axios'
 
 function App() {
    return (
@@ -38,8 +32,6 @@ function MainComponent() {
    const [username, setUsername] = useState(null)
    const [dropdownVisible, setDropdownVisible] = useState(false)
 
-   const navigate = useNavigate()
-
    useEffect(() => {
       const storedLoginStatus = localStorage.getItem('isLoggedIn')
       const storedRole = localStorage.getItem('userRole')
@@ -51,16 +43,6 @@ function MainComponent() {
          setUsername(storedName)
       }
    }, [])
-
-   useEffect(() => {
-      if (isLoggedIn && window.performance && window.performance.navigation.type !== window.performance.navigation.TYPE_RELOAD) {
-         if (role === 'admin') navigate('/admin-dashboard')
-         else navigate('/patient-dashboard')
-      } else if (!isLoggedIn && window.performance && window.performance.navigation.type !== window.performance.navigation.TYPE_RELOAD) {
-         navigate('/login-page')
-      }
-}, [isLoggedIn])
-
 
    useEffect(() => {
       const checkLoginStatus = () => {
@@ -94,9 +76,19 @@ function MainComponent() {
    const handleLogin = () => {
       localStorage.setItem('isLoggedIn', 'true')
       setIsLoggedIn(true)
+      if (role === 'patient') {
+         localStorage.setItem('activeStatus', 'true')        
+      }
    }
 
    const handleLogout = () => {
+      if (role === 'patient') {
+         axios.post(logoutRoute, {
+            username,
+            role,
+         })
+         localStorage.removeItem('activeStatus')
+      }
       localStorage.setItem('isLoggedIn', 'false')
       localStorage.removeItem('userRole')
       localStorage.removeItem('userName')
@@ -106,7 +98,7 @@ function MainComponent() {
    const toggleDropdown = () => {
       setDropdownVisible(!dropdownVisible)
    }
-   
+
    return (
       <>
          <header className="w-full flex justify-between sm:px-8 px-5 py-4 border-b border-b-[#e6ebf4] bg-teal-600/35 shadow-lg">
@@ -152,7 +144,7 @@ function MainComponent() {
                         {dropdownVisible && (
                            <div
                               id="userDropdown"
-                              className="absolute right-0 mt-2 p-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100"
+                              className="absolute z-10 right-0 mt-2 p-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100"
                            >
                               <div className="py-1">
                                  {role === 'patient' && (

@@ -8,8 +8,25 @@ import {
 import { Link } from 'react-router-dom'
 import { TiArrowSortedUp, TiArrowSortedDown } from 'react-icons/ti'
 
+const UserCard = ({ username, userrole }) => (
+   <header className="flex flex-row justify-between bg-teal-600/35 rounded-xl">
+      <div className="max-w-7xl px-6 py-7">
+         <h1 className="text-2xl font-semibold text-gray-800">Patient Dashboard</h1>
+      </div>
+      <div className="flex flex-col rounded-md px-2 py-3 mb-2 mr-6">
+         <h2 className="text-xl font-semibold mb-2 text-gray-600">{username}</h2>
+         <p className="text-gray-600">
+            <span className="font-semibold">Role:</span> {userrole}
+         </p>
+      </div>
+   </header>
+)
+
 const PatientDashboard = () => {
    /* State to manage the sections */
+
+   const [username, setUsername] = useState(null)
+   const [role, setRole] = useState(null)
 
    const [activeSection, setActiveSection] = useState('selectSymptoms')
 
@@ -38,7 +55,23 @@ const PatientDashboard = () => {
    const algorithmOptions = ['DecisionTree']
 
    useEffect(() => {
+      const fetchUser = async () => {
+         const storedName = localStorage.getItem('userName')
+         const storedRole = localStorage.getItem('userRole')
+         if (storedName && storedRole) {
+            setUsername(storedName)
+            setRole(storedRole)
+         }
+      }
+      fetchUser()
+   }, [])
+
+   useEffect(() => {
       const fetchSymptoms = async () => {
+         const storedName = localStorage.getItem('userName')
+         if (storedName) {
+            setUsername(storedName)
+         }
          try {
             const response = await fetch(getSymptomsRoute, {
                method: 'GET',
@@ -192,6 +225,7 @@ const PatientDashboard = () => {
 
    return (
       <>
+         <UserCard username={username} userrole={role} />
          <div className="flex flex-row justify-between p-4">
             <div className="flex flex-row  ml-8 w-5/5 ">
                {activeSection === 'selectSymptoms' && (
@@ -342,6 +376,16 @@ const PatientDashboard = () => {
                                     >
                                        Clear All
                                     </button>
+                                    <div className="flex flex-wrap items-center mt-4 ml-8">
+                                       {selectedSymptoms.map((symptom, index) => (
+                                          <span
+                                             key={index}
+                                             className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
+                                          >
+                                             {symptom}
+                                          </span>
+                                       ))}
+                                    </div>
                                  </div>
                               </div>
                            </form>
@@ -354,7 +398,7 @@ const PatientDashboard = () => {
             </div>
 
             {activeSection === 'medicationNutrient' && (
-               <div className="flex flex-col w-full mr-7 max-h-80 bg-purple-300/10 p-6 rounded-lg shadow-md ">
+               <div className="flex flex-col w-full mr-7  bg-purple-300/10 p-6 rounded-lg shadow-md ">
                   <h2 className="text-xl font-bold mb-2 text-gray-800">
                      Medication and Nutrient Suggestions
                   </h2>

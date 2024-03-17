@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import styled from 'styled-components'
@@ -27,7 +28,6 @@ const Login = ({ onLogin }) => {
       try {
          setLoading(true)
          const response = await axios.post(loginRoute, {
-            username,
             email,
             password,
             role,
@@ -37,12 +37,14 @@ const Login = ({ onLogin }) => {
             setMessage('Login successful')
             localStorage.setItem('isLoggedIn', 'true')
             localStorage.setItem('userRole', role)
-            localStorage.setItem('userName', username)
+            localStorage.setItem('userName', response.data.username)
             onLogin() // Notify the parent component about the successful login
             if (role === 'admin') {
                navigate('/admin-dashboard')
+               window.location.reload();
             } else {
                navigate('/patient-dashboard')
+               window.location.reload();
             }
          }
       } catch (error) {
@@ -56,7 +58,7 @@ const Login = ({ onLogin }) => {
    return (
       <Container>
          <LoginForm>
-            <h1>Login</h1>            
+            <h1>Login</h1>
             <InputGroup>
                <label>Email:</label>
                <Input
@@ -83,12 +85,14 @@ const Login = ({ onLogin }) => {
                   <option value="admin">Admin</option>
                   <option value="patient">Patient</option>
                </select>
-            </InputGroup>
+            </InputGroup>            
             <Button onClick={handleLogin} disabled={loading}>
                {loading ? 'Logging in...' : 'Log In'}
             </Button>
             {message && <Message>{message}</Message>}
-            <Link to="/">Don't have an account? <span className='text-blue-500'>Register</span></Link>
+            <Link to="/">
+               Don't have an account? <span className="text-blue-500">Register</span>
+            </Link>
          </LoginForm>
       </Container>
    )

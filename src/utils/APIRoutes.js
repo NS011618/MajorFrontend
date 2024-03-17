@@ -1,4 +1,4 @@
-const host = "http://localhost:5000";
+const host = "https://majorbackend-p7u6.onrender.com";
 /* User Dashboard routes */ 
 export const registerRoute = `${host}/signup`;
 export const loginRoute = `${host}/login`;
